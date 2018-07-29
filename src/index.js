@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 // const Cell = require('./components/Cell')
+const algorithm = require('./algorithm')
 
 const Wrapper = styled.div`
   display: flex;
@@ -39,10 +40,10 @@ const Cell = styled.div`
 
 const Grid = ({ grid }) => (
   <div className="grid">
-    {grid.map(row => (
-      <div className="grid-rows">
-        {row.map(col => {
-          return <Cell alive={col} />
+    {grid.map((row, i) => (
+      <div key={'row' + i} className="grid-rows">
+        {row.map((col, j) => {
+          return <Cell key={'col'+j} alive={col} />
         })}
       </div>
     ))}
@@ -55,8 +56,8 @@ class Index extends React.Component {
     super(props)
     this.state = {
       grid: [],
-      length: 30,
-      width: 60,
+      length: 50,
+      width: 40,
     }
     this.randomNumber = this.randomNumber.bind(this)
     this.generateGrid = this.generateGrid.bind(this)
@@ -64,7 +65,8 @@ class Index extends React.Component {
   }
 
   runAlgorithm() {
-
+    const nextGrid = algorithm.nextState(this.state.grid)
+    this.setState({ grid: nextGrid })
   }
 
   componentDidMount() {
@@ -77,9 +79,9 @@ class Index extends React.Component {
 
   generateGrid () {
     let grid = new Array(length)
-    for (let i = 0; i < this.state.length; i++) {
+    for (let i = 0; i < this.state.length; i++) { //rows
       grid[i] = new Array(this.state.width)
-      for (let j = 0; j < this.state.width; j++) {
+      for (let j = 0; j < this.state.width; j++) { // cols
         grid[i][j] = this.randomNumber()
       }
     }
